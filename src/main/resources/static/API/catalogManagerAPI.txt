@@ -1,0 +1,18 @@
+catalogs:分类管理
+
+-/catalogs:GET获取用户的分类列表
+ 。 username:用户账号
+
+ /catalogs:POST保存用户分类
+ 。username:用户账号
+ 。CatalogVO:含username.Catalog.
+
+ -/catalogs/edit:GET 获取编辑分类的界面
+
+ -/catalogs/edit/{id}:GET 获取某个ID分类的编辑界面
+
+ -/catalogs/{id}:DELETE 删除分类
+ 。id:分类id
+ 。username:用户账号
+
+ 分类管理的后台实现：

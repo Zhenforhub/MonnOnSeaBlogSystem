@@ -1,0 +1,14 @@
+
+comments:评论管理
+/comments:GET 获取评论列表
+     blog:id 博客的id
+
+/comments:Post 保存评论
+ blogId:博客ID
+ commentContent:评论内容
+
+ /comments/{id}:DELETE 删除评论
+
+ id：评论ID
+ blogId:博客ID
+

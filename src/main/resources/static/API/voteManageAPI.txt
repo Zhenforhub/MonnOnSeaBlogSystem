@@ -1,0 +1,8 @@
+
+votes:点赞管理
+/votes:POST 保存点赞
+blogId:博客ID
+
+/votes/{id}:DELETE 删除点赞
+id:点赞ID
+blogId:博客id
