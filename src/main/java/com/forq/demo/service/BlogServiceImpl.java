@@ -1,10 +1,7 @@
 package com.forq.demo.service;
 
 import com.forq.demo.dao.BlogRespository;
-import com.forq.demo.pojo.Blog;
-import com.forq.demo.pojo.Comment;
-import com.forq.demo.pojo.User;
-import com.forq.demo.pojo.Vote;
+import com.forq.demo.pojo.*;
 import com.sun.crypto.provider.BlowfishKeyGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -95,14 +92,14 @@ public class BlogServiceImpl implements BlogService {
          */
         Page<Blog> blogs=blogRespository
                 .findByTitleLikeAndUserOrTagsLikeAndUserOrderByCreateTimeDesc
-                        (title,user,tags,user, (java.awt.print.Pageable) pageable);
+                        (title,user,tags,user, pageable);
         return blogs;
     }
     @Transactional
     @Override
     public Page<Blog> listBlogsByTitleVoteAndSort(User user, String title, Pageable pageable) {
         title="%"+title+"%";
-        Page<Blog> blogs=blogRespository.findByUserAndTtileLike(user, title, (java.awt.print.Pageable) pageable);
+        Page<Blog> blogs=blogRespository.findByUserAndTtileLike(user, title, pageable);
         /**
          * 我比较想知道pageable是怎么用的 接口的条件是怎么样的
          */
@@ -206,5 +203,12 @@ public class BlogServiceImpl implements BlogService {
             this.saveBlog(originalBlog);
         }
 
+    }
+
+    @Override
+    public Page<Blog> listBlogByCatalog(Catalog catalog, Pageable pageable) {
+        Page<Blog> blogs=blogRespository.findByCatalog(catalog,pageable);
+
+        return blogs;
     }
 }

@@ -2,9 +2,11 @@ package com.forq.demo.controller;
 
 import com.forq.demo.dao.UserRespository;
 import com.forq.demo.pojo.Blog;
+import com.forq.demo.pojo.Catalog;
 import com.forq.demo.pojo.User;
 import com.forq.demo.pojo.Vote;
 import com.forq.demo.service.BlogService;
+import com.forq.demo.service.CatalogService;
 import com.forq.demo.service.UserService;
 import com.forq.demo.util.ConstraintViolationExceptionHandler;
 import com.forq.demo.vo.Response;
@@ -30,6 +32,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import sun.plugin.com.PropertyGetDispatcher;
 
+import javax.annotation.Resource;
 import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,8 +57,13 @@ public class UserspaceController {
     private UserService userService;
 
 
-    @Autowired
+    @Resource
     private UserDetailsService userDetailsService;
+
+
+    @Autowired
+    private CatalogService catalogService;
+
 
     @Autowired
     private BlogService blogService;
@@ -85,6 +93,7 @@ public class UserspaceController {
          */
 
     }
+
     /**
      * 获取用户的博客列表
      * @param user
@@ -109,6 +118,21 @@ public class UserspaceController {
         User user=(User)userDetailsService.loadUserByUsername(username);
         Page<Blog> page=null;
         if(catalogId!=null&& catalogId>0){//分类查询
+            /**
+             * 这就是要做的分类查询
+             * 我明白了
+             *
+             */
+            Catalog catalog= catalogService.getCatalogById(catalogId).get();
+            Sort sort;
+            Pageable pageable=new PageRequest(pageIndex,pageSize);
+
+            page=blogService.listBlogByCatalog(catalog,pageable);
+
+            order="";
+
+            model.addAttribute("catalogId",catalogId);
+
             //TODO
         }else if(order.equals("hot")){//最热查询
             Sort sort=null;
@@ -173,6 +197,9 @@ public class UserspaceController {
      */
     @GetMapping("/{username}/blogs/edit")
     public ModelAndView createBlog(@PathVariable("username") String username,Model model){
+        User user=(User)userDetailsService.loadUserByUsername(username);
+        List<Catalog> catalogs=catalogService.ListCatalog(user);
+        model.addAttribute("catalogs",catalogs);
         model.addAttribute("blog",new Blog(null,null,null,null,null,null,null,null,null,null));
         model.addAttribute("fileServerUrl",fileServerUrl);
 
@@ -189,11 +216,12 @@ public class UserspaceController {
     public ModelAndView editBlog(@PathVariable("username") String username
                                  ,@PathVariable("id") Long id
             ,Model model){
+        User user=(User)userDetailsService.loadUserByUsername(username);
+        List<Catalog> catalogs=catalogService.ListCatalog(user);
+        model.addAttribute("catalogs",catalogs);
         model.addAttribute("blog",blogService.getBlogById(id).get());
         model.addAttribute("fileServerUrl",fileServerUrl);
         return new  ModelAndView("/userspace/blogedit","blogModel",model);
-
-
     }
     /**
      * 保存博客
@@ -204,6 +232,13 @@ public class UserspaceController {
     @PostMapping("/{username}/blogs/edit")
     @PreAuthorize("authentication.name.equals(#username)")
     public ResponseEntity<Response> saveBlog(@PathVariable("username") String username,@RequestBody Blog blog){
+
+
+        //对Catalog 进行判空处理
+        if(blog.getCatalog().getId()==null){
+            return ResponseEntity.ok()
+                    .body(new Response(false,"未选择分类"));
+        }
         try{
             //先判断修改还是新增
             if(blog.getId()!=null){
@@ -213,6 +248,8 @@ public class UserspaceController {
                     orignalBlog.setTitle(blog.getTitle())
                     .setContent(blog.getContent());
                     orignalBlog.setSummary(blog.getSummary());
+
+                    orignalBlog.setTags(blog.getTags());//增加了对于标签的处理
 
                     blogService.saveBlog(orignalBlog);
                 }
@@ -483,6 +520,9 @@ public class UserspaceController {
 
     }
 
+    /**
+     * 增加对分类查询的判断
+     */
 
 
 

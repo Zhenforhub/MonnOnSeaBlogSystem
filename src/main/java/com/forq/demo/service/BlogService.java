@@ -9,6 +9,7 @@ package com.forq.demo.service;
 
 import com.forq.demo.dao.BlogRespository;
 import com.forq.demo.pojo.Blog;
+import com.forq.demo.pojo.Catalog;
 import com.forq.demo.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -102,5 +103,19 @@ public interface BlogService {
      * @param voteId
      */
     void removeVote(Long blogId,Long voteId);
+
+    /**
+     * 因为要进行分类的管理
+     * 所以增加接口
+     */
+    /**
+     * 根据分类进行查询
+     * @param catalog
+     * @param pageable
+     * @return
+     */
+    Page<Blog> listBlogByCatalog(Catalog catalog,Pageable pageable);
+
+
 
 }

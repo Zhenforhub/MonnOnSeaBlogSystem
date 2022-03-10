@@ -81,8 +81,18 @@ public class Blog implements Serializable {
 
     @Column(name="tags",length = 100)
     private String tags;//标签
+
+
+
+    public void setTags(String tags){
+        this.tags=tags;
+    }
+
+    public String getTags(){
+        return this.tags;
+    }
     /**
-     *标签 难道只有一个？
+     *
      */
 
     /**修改blog类来建立起blog 与comment之间的关系

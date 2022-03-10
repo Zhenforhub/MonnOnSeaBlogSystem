@@ -4,9 +4,10 @@ import com.forq.demo.pojo.Blog;
 import com.forq.demo.pojo.Catalog;
 import com.forq.demo.pojo.User;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.awt.print.Pageable;
+//import java.awt.print.Pageable;
 import java.util.List;
 
 /**
@@ -62,7 +63,7 @@ public interface BlogRespository  extends JpaRepository<Blog,Long> {
      * @param pageable
      * @return
      */
-    Page<Blog> findByCatalog(Catalog catalog,Pageable pageable);
+    Page<Blog> findByCatalog(Catalog catalog, Pageable pageable);
 
 
 

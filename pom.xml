@@ -104,7 +104,15 @@
             <version>4.0.0</version>
             <scope>compile</scope>
         </dependency>
-
+       <!--
+        添加对于全文检索功能实现的elasticResearch的依赖
+          -->
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-elasticsearch -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+            <version>2.6.2</version>
+        </dependency>
 
     </dependencies>
 
